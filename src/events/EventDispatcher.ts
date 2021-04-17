@@ -1,5 +1,7 @@
 import Event from "./Event";
 
+type Listener = ((eventObj: Object) => boolean|void) | { handleEvent: ((eventObj: Object) => boolean|void) };
+
 export default class EventDispatcher {
 
     protected listeners: {[key: string]: EventListenerObject[]} | null = null;
@@ -17,7 +19,7 @@ export default class EventDispatcher {
         target.willTrigger = p.willTrigger;
     }
 
-    public addEventListener(type: string, listener: EventListenerObject | any, useCapture: boolean = false): any {
+    public addEventListener(type: string, listener: Listener, useCapture: boolean = false): Function|Object {
         let listeners: {[key: string]: object[]};
         if (useCapture) {
             listeners = this.captureListeners = this.captureListeners || {};
@@ -37,7 +39,8 @@ export default class EventDispatcher {
         return listener;
     }
 
-    public on(type: string, listener: EventListenerObject | any , scope: any = null, once: boolean = false, data: any = null, useCapture: boolean = false): Function {
+    public on(type: string, listener: Listener, scope?: Object, once?: boolean, data?: any, useCapture?: boolean): Function;
+    public on(type: string, listener: any, scope: any = null, once: boolean = false, data: any = null, useCapture: boolean = false): Function|Object {
         if (listener.handleEvent) {
             scope = scope || listener;
             listener = listener.handleEvent;
@@ -49,11 +52,15 @@ export default class EventDispatcher {
         }, useCapture);
     }
 
-    public removeEventListener(type: string, listener: EventListenerObject, useCapture: boolean = false) {
+    public removeEventListener(type: string, listener: Listener|Function, useCapture: boolean = false) {
         const listeners = useCapture ? this.captureListeners : this.listeners;
-        if (!listeners) { return; }
+        if (!listeners) {
+            return;
+        }
         let arr = listeners[type];
-        if (!arr) { return; }
+        if (!arr) {
+            return;
+        }
         for (let i=0, l=arr.length; i<l; i++) {
             if (arr[i] === listener) {
                 if (l===1) {
@@ -81,7 +88,7 @@ export default class EventDispatcher {
         }
     }
 
-    public dispatchEvent(eventObj: string | Event, bubbles: boolean = false, cancelable: boolean = false): boolean {
+    public dispatchEvent(eventObj: Event|string, bubbles: boolean = false, cancelable: boolean = false): boolean{
         if (typeof eventObj == "string") {
             // skip everything if there's no listeners and it doesn't bubble:
             const listeners = this.listeners;
@@ -158,6 +165,8 @@ export default class EventDispatcher {
                 }
             }
         }
-        if (eventPhase === 2) { this._dispatchEvent(eventObj, 2.1); }
+        if (eventPhase === 2) {
+            this._dispatchEvent(eventObj, 2.1);
+        }
     }
 }

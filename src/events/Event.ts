@@ -7,11 +7,6 @@
 export default class Event {
 
     /**
-     * The type of event.
-     **/
-    type: string;
-
-    /**
      * Indicates whether the event will bubble through the display list.
      **/
     bubbles: boolean;
@@ -20,11 +15,6 @@ export default class Event {
      * Indicates whether the default behaviour of this event can be cancelled via {@link core.Event#preventDefault}.
      **/
     cancelable: boolean;
-
-    /**
-     * The object that generated an event.
-     **/
-    target: any = null;
 
     /**
      * The current target that a bubbling event is being dispatched from.
@@ -39,6 +29,7 @@ export default class Event {
      * Indicates if {@link core.Event#preventDefault} has been called on this event.
      **/
     defaultPrevented: boolean = false;
+
     /**
      * For bubbling events, this indicates the current event phase:
      * <OL>
@@ -65,9 +56,38 @@ export default class Event {
     removed: boolean = false;
 
     /**
+     * The object that generated an event.
+     **/
+    target: any = null;
+
+    /**
      * The epoch time at which this event was created.
      **/
     timeStamp: number;
+
+    /**
+     * The type of event.
+     **/
+    type: string;
+
+    // other event payloads
+    data?: any;
+    delta?: number;
+    error?: string;
+    id?: string;
+    item?: any;
+    loaded?: number;
+    name?: string;
+    next?: string;
+    params?: any;
+    paused?: boolean;
+    progress?: number;
+    rawResult?: any;
+    result?: any;
+    runTime?: number;
+    src?: string;
+    time?: number;
+    total?: number;
 
     constructor(type: string, bubbles: boolean = false, cancelable: boolean = false) {
         this.type = type;

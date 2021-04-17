@@ -185,11 +185,11 @@ export default class Ticker extends EventDispatcher {
         return _instance.on(type, listener, scope, once, data, useCapture);
     }
 
-    static removeEventListener(type: string, listener: EventListenerObject, useCapture: boolean = false) {
+    static removeEventListener(type: string, listener: any, useCapture: boolean = false) {
         _instance.removeEventListener(type, listener, useCapture);
     }
 
-    static off (type: string, listener: EventListenerObject, useCapture: boolean = false) {
+    static off (type: string, listener: any, useCapture: boolean = false) {
         _instance.off(type, listener, useCapture);
     }
 
