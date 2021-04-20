@@ -1,6 +1,6 @@
 {
   "name": "@create2d/core",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Core library for Tween, Easel, Preload and Sound",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
