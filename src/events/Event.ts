@@ -1,6 +1,6 @@
 
 /**
- * Contains properties and methods shared by all events for use with {@link core.EventDispatcher}.
+ * Contains properties and methods shared by all events for use with {@link EventDispatcher}.
  * Note that Event objects are often reused, so you should never
  * rely on an event object's state outside of the call stack it was received in.
  **/
@@ -12,7 +12,7 @@ export default class Event {
     bubbles: boolean;
 
     /**
-     * Indicates whether the default behaviour of this event can be cancelled via {@link core.Event#preventDefault}.
+     * Indicates whether the default behaviour of this event can be cancelled via {@link Event#preventDefault}.
      **/
     cancelable: boolean;
 
@@ -26,7 +26,7 @@ export default class Event {
     currentTarget: any = null;
 
     /**
-     * Indicates if {@link core.Event#preventDefault} has been called on this event.
+     * Indicates if {@link Event#preventDefault} has been called on this event.
      **/
     defaultPrevented: boolean = false;
 
@@ -41,17 +41,17 @@ export default class Event {
     eventPhase: number = 0;
 
     /**
-     * Indicates if {@link core.Event#stopImmediatePropagation} has been called on this event.
+     * Indicates if {@link Event#stopImmediatePropagation} has been called on this event.
      **/
     immediatePropagationStopped: boolean = false;
 
     /**
-     * Indicates if {@link core.Event#stopPropagation} or {@link core.Event#stopImmediatePropagation} has been called on this event.
+     * Indicates if {@link Event#stopPropagation} or {@link Event#stopImmediatePropagation} has been called on this event.
      **/
     propagationStopped: boolean = false;
 
     /**
-     * Indicates if {@link core.Event#remove} has been called on this event.
+     * Indicates if {@link Event#remove} has been called on this event.
      */
     removed: boolean = false;
 
@@ -122,7 +122,9 @@ export default class Event {
     }
 
     public set(props: { [k: string]: any }): Event {
-        Object.defineProperties(this, props);
+        for (let n in props) {
+            (this as { [k: string]: any })[n] = props[n];
+        }
         return this;
     }
 

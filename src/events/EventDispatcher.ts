@@ -147,7 +147,7 @@ export default class EventDispatcher {
     private _dispatchEvent (eventObj: Event, eventPhase: number) {
         let l, arr, listeners = (eventPhase <= 2) ? this.captureListeners : this.listeners;
         if (eventObj && listeners && (arr = listeners[eventObj.type]) && (l=arr.length)) {
-            try { Object.defineProperty(eventObj, 'currentTarget', this); } catch (e) {}
+            try { eventObj.currentTarget = this; } catch (e) {}
             try { eventObj.eventPhase = eventPhase|0; } catch (e) {}
             eventObj.removed = false;
 

@@ -143,7 +143,7 @@ export default class Ticker extends EventDispatcher {
             }
         }
         this._raf = false;
-        this._timerId = setTimeout(this._handleTimeout, this._interval);
+        this._timerId = setTimeout(this._handleTimeout.bind(this), this._interval);
     }
 
     private _tick() {
@@ -161,10 +161,10 @@ export default class Ticker extends EventDispatcher {
         if (this.hasEventListener("tick")) {
             const event: Event = new Event("tick");
             const maxDelta = this.maxDelta;
-            Object.defineProperty(event, 'delta', (maxDelta && elapsedTime > maxDelta) ? maxDelta : elapsedTime);
-            Object.defineProperty(event, 'paused', paused);
-            Object.defineProperty(event, 'time', time);
-            Object.defineProperty(event,'runTime', time-this._pausedTime);
+            event.delta = (maxDelta && elapsedTime > maxDelta) ? maxDelta : elapsedTime;
+            event.paused = paused;
+            event.time = time;
+            event.runTime = time-this._pausedTime;
             this.dispatchEvent(event);
         }
 
