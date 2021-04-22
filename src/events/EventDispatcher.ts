@@ -102,7 +102,7 @@ export default class EventDispatcher {
         }
 
         eventObj.target = this;
-        let o = Object.getPrototypeOf(this);
+        let o = this as any;
         if (!eventObj.bubbles || !o.parent) {
             this._dispatchEvent(eventObj, 2);
         } else {
@@ -130,7 +130,7 @@ export default class EventDispatcher {
     }
 
     public willTrigger(type: string): boolean {
-        let o = Object.getPrototypeOf(this);
+        let o = this as any;
         while (o) {
             if (o.hasEventListener(type)) {
                 return true;
