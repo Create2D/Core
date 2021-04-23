@@ -1,9 +1,12 @@
 {
   "name": "@create2d/core",
-  "version": "0.0.5",
-  "description": "Core library for Tween, Easel, Preload and Sound",
+  "version": "0.0.6",
+  "description": "Core library for create2d",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist/**"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
