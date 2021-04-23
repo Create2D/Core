@@ -75,7 +75,7 @@ export default class Ticker extends EventDispatcher {
         this._inited = false;
     }
 
-    public getMeasuredTickTime(ticks: number): number {
+    public getMeasuredTickTime(ticks?: number): number {
         let ttl=0, times=this._tickTimes;
         if (!times || times.length < 1) { return -1; }
 
@@ -85,7 +85,7 @@ export default class Ticker extends EventDispatcher {
         return ttl/ticks;
     }
 
-    public getMeasuredFPS(ticks: number): number {
+    public getMeasuredFPS(ticks?: number): number {
         const times = this._times;
         if (!times || times.length < 2) { return -1; }
 
