@@ -1,7 +1,7 @@
 import Event from "../events/Event";
 import EventDispatcher from "../events/EventDispatcher";
 
-export declare const enum TimingMode {
+declare const enum TimingMode {
     RAF_SYNCHED = "synched",
     RAF = "raf",
     TIMEOUT = "timeout"
@@ -28,7 +28,7 @@ export default class Ticker extends EventDispatcher {
         super();
     }
 
-    public set interval(interval: number) {
+    private set interval(interval: number) {
         this._interval = interval;
         if (!this._inited) {
             return;
@@ -36,22 +36,23 @@ export default class Ticker extends EventDispatcher {
         this._setupTick();
     }
 
-    public get interval() {
+    private get interval(): number {
         return this._interval;
     }
 
 
-    public set framerate(value: number) {
+    private set framerate(value: number) {
         this.interval = 1000/value;
     }
 
-    public get framerate() {
+    private get framerate(): number {
         return 1000/this._interval;
     }
 
-// public static methods:
-    public init() {
-        if (this._inited) { return; }
+    private init() {
+        if (this._inited) {
+            return;
+        }
         this._inited = true;
         this._times = [];
         this._tickTimes = [];
@@ -60,11 +61,11 @@ export default class Ticker extends EventDispatcher {
         this.interval = this._interval;
     }
 
-    public reset() {
+    private reset() {
         if(!this._timerId) return;
 
         if (this._raf) {
-            cancelAnimationFrame&&cancelAnimationFrame(this._timerId);
+            cancelAnimationFrame && cancelAnimationFrame(this._timerId);
         } else {
             clearTimeout(this._timerId);
         }
@@ -75,17 +76,19 @@ export default class Ticker extends EventDispatcher {
         this._inited = false;
     }
 
-    public getMeasuredTickTime(ticks?: number): number {
+    private getMeasuredTickTime(ticks?: number): number {
         let ttl=0, times=this._tickTimes;
         if (!times || times.length < 1) { return -1; }
 
         // by default, calculate average for the past ~1 second:
         ticks = Math.min(times.length, ticks||(this.framerate|0));
-        for (let i=0; i<ticks; i++) { ttl += times[i]; }
+        for (let i=0; i<ticks; i++) {
+            ttl += times[i];
+        }
         return ttl/ticks;
     }
 
-    public getMeasuredFPS(ticks?: number): number {
+    private getMeasuredFPS(ticks?: number): number {
         const times = this._times;
         if (!times || times.length < 2) { return -1; }
 
@@ -94,20 +97,18 @@ export default class Ticker extends EventDispatcher {
         return 1000/((times[0]-times[ticks])/ticks);
     }
 
-    public getTime(runTime: boolean = false): number {
+    private getTime(runTime: boolean = false): number {
         return this._startTime ? this.time - (runTime ? this._pausedTime : 0) : -1;
     }
 
-    public getEventTime (runTime: boolean = false): number {
+    private getEventTime (runTime: boolean = false): number {
         return this._startTime ? (this._lastTime || this._startTime) - (runTime ? this._pausedTime : 0) : -1;
     }
 
-    public getTicks (pauseable: boolean = false) {
+    private getTicks (pauseable: boolean = false) {
         return  this._ticks - (pauseable ? this._pausedTicks : 0);
     }
 
-
-// private static methods:
     private _handleSynch() {
         this._timerId = null;
         this._setupTick();
@@ -137,7 +138,7 @@ export default class Ticker extends EventDispatcher {
         const mode = this.timingMode;
         if (mode === TimingMode.RAF_SYNCHED || mode === TimingMode.RAF) {
             if (requestAnimationFrame) {
-                this._timerId = requestAnimationFrame(mode === TimingMode.RAF ? this._handleRAF : this._handleSynch);
+                this._timerId = requestAnimationFrame(mode === TimingMode.RAF ? this._handleRAF.bind(this) : this._handleSynch.bind(this));
                 this._raf = true;
                 return;
             }
@@ -179,6 +180,7 @@ export default class Ticker extends EventDispatcher {
         const now = window.performance && window.performance.now;
         return ((now&&now.call(window.performance))||(new Date().getTime())) - this._startTime;
     }
+
 
 
     static on(type: string, listener: EventListenerObject | any , scope: any = null, once: boolean = false, data: any = null, useCapture: boolean = false): Function {
@@ -245,18 +247,46 @@ export default class Ticker extends EventDispatcher {
         return _instance.getTicks(pauseable);
     }
 
-    static get interval(): number { return _instance.interval; }
-    static set interval(interval: number) { _instance.interval = interval; }
-    static get framerate(): number { return _instance.framerate; }
-    static set framerate (framerate) { _instance.framerate = framerate; }
+    static get interval(): number {
+        return _instance.interval;
+    }
+
+    static set interval(interval: number) {
+        _instance.interval = interval;
+    }
+
+    static get framerate(): number {
+        return _instance.framerate;
+    }
+
+    static set framerate (framerate) {
+        _instance.framerate = framerate;
+    }
     // static get name(): string { return _instance.name; }
     // static set name(name: string) { _instance.name = name; }
-    static get timingMode(): TimingMode { return _instance.timingMode; }
-    static set timingMode (timingMode: TimingMode) { _instance.timingMode = timingMode; }
-    static get maxDelta(): number { return _instance.maxDelta; }
-    static set maxDelta(maxDelta: number) { _instance.maxDelta = maxDelta; }
-    static get paused(): boolean { return _instance.paused; }
-    static set paused(paused: boolean) { _instance.paused = paused; }
+    static get timingMode(): TimingMode {
+        return _instance.timingMode;
+    }
+
+    static set timingMode (timingMode: TimingMode) {
+        _instance.timingMode = timingMode;
+    }
+
+    static get maxDelta(): number {
+        return _instance.maxDelta;
+    }
+
+    static set maxDelta(maxDelta: number) {
+        _instance.maxDelta = maxDelta;
+    }
+
+    static get paused(): boolean {
+        return _instance.paused;
+    }
+
+    static set paused(paused: boolean) {
+        _instance.paused = paused;
+    }
 
     static get RAF_SYNCHED () { return TimingMode.RAF_SYNCHED; }
     static get RAF () { return TimingMode.RAF; }
