@@ -231,7 +231,7 @@ export default class Ticker extends EventDispatcher {
         return _instance.getMeasuredTickTime(ticks);
     }
 
-    static getMeasuredFPS (ticks: number): number {
+    static getMeasuredFPS (ticks?: number): number {
         return _instance.getMeasuredFPS(ticks);
     }
 
