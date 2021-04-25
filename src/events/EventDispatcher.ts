@@ -1,6 +1,6 @@
 import Event from "./Event";
 
-type Listener = ((eventObj: Object) => boolean|void) | { handleEvent: ((eventObj: Object) => boolean|void) };
+type Listener = Function | ((event?: Object) => boolean|void) | { handleEvent: ((event?: Object) => boolean|void) };
 
 export default class EventDispatcher {
 
