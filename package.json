@@ -1,6 +1,6 @@
 {
   "name": "@create2d/core",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Core library for create2d",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
