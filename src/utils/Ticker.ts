@@ -8,6 +8,11 @@ declare const enum TimingMode {
 }
 
 export default class Ticker extends EventDispatcher {
+    private static _instance: Ticker;
+    private static get instance() {
+        return this._instance || (this._instance = new Ticker());
+    }
+
     public timingMode: TimingMode = TimingMode.TIMEOUT;
     public maxDelta = 0;
     public paused = false;
@@ -131,7 +136,6 @@ export default class Ticker extends EventDispatcher {
         this._tick();
     }
 
-
     private _setupTick() {
         if (this._timerId != null) { return; } // avoid duplicates
 
@@ -181,117 +185,111 @@ export default class Ticker extends EventDispatcher {
         return ((now&&now.call(window.performance))||(new Date().getTime())) - this._startTime;
     }
 
-
-
     static on(type: string, listener: EventListenerObject | any , scope: any = null, once: boolean = false, data: any = null, useCapture: boolean = false): Function {
-        return _instance.on(type, listener, scope, once, data, useCapture);
+        return Ticker.instance.on(type, listener, scope, once, data, useCapture);
     }
 
     static removeEventListener(type: string, listener: any, useCapture: boolean = false) {
-        _instance.removeEventListener(type, listener, useCapture);
+        Ticker.instance.removeEventListener(type, listener, useCapture);
     }
 
     static off (type: string, listener: any, useCapture: boolean = false) {
-        _instance.off(type, listener, useCapture);
+        Ticker.instance.off(type, listener, useCapture);
     }
 
     static removeAllEventListeners(type: string) {
-        _instance.removeAllEventListeners(type);
+        Ticker.instance.removeAllEventListeners(type);
     }
 
     static dispatchEvent(eventObj: string | Event, bubbles: boolean = false, cancelable: boolean = false): boolean {
-        return _instance.dispatchEvent(eventObj, bubbles, cancelable);
+        return Ticker.instance.dispatchEvent(eventObj, bubbles, cancelable);
     }
 
     static hasEventListener(type: string): boolean {
-        return _instance.hasEventListener(type);
+        return Ticker.instance.hasEventListener(type);
     }
 
     static willTrigger(type: string): boolean {
-        return _instance.willTrigger(type);
+        return Ticker.instance.willTrigger(type);
     }
 
     static toString () {
-        return _instance.toString();
+        return Ticker.instance.toString();
     }
 
     static init () {
-        _instance.init();
+        Ticker.instance.init();
     }
 
     static reset () {
-        _instance.reset();
+        Ticker.instance.reset();
     }
 
     static addEventListener(type: string, listener: EventListenerObject | any, useCapture: boolean = false): any {
-        _instance.addEventListener(type, listener, useCapture);
+        Ticker.instance.addEventListener(type, listener, useCapture);
     }
 
     static getMeasuredTickTime (ticks: number): number {
-        return _instance.getMeasuredTickTime(ticks);
+        return Ticker.instance.getMeasuredTickTime(ticks);
     }
 
     static getMeasuredFPS (ticks?: number): number {
-        return _instance.getMeasuredFPS(ticks);
+        return Ticker.instance.getMeasuredFPS(ticks);
     }
 
     static getTime (runTime?: boolean): number {
-        return _instance.getTime(runTime);
+        return Ticker.instance.getTime(runTime);
     }
 
     static getEventTime (runTime?: boolean) {
-        return _instance.getEventTime(runTime);
+        return Ticker.instance.getEventTime(runTime);
     }
 
     static getTicks (pauseable?: boolean) {
-        return _instance.getTicks(pauseable);
+        return Ticker.instance.getTicks(pauseable);
     }
 
     static get interval(): number {
-        return _instance.interval;
+        return Ticker.instance.interval;
     }
 
     static set interval(interval: number) {
-        _instance.interval = interval;
+        Ticker.instance.interval = interval;
     }
 
     static get framerate(): number {
-        return _instance.framerate;
+        return Ticker.instance.framerate;
     }
 
     static set framerate (framerate) {
-        _instance.framerate = framerate;
+        Ticker.instance.framerate = framerate;
     }
-    // static get name(): string { return _instance.name; }
-    // static set name(name: string) { _instance.name = name; }
+
     static get timingMode(): TimingMode {
-        return _instance.timingMode;
+        return Ticker.instance.timingMode;
     }
 
     static set timingMode (timingMode: TimingMode) {
-        _instance.timingMode = timingMode;
+        Ticker.instance.timingMode = timingMode;
     }
 
     static get maxDelta(): number {
-        return _instance.maxDelta;
+        return Ticker.instance.maxDelta;
     }
 
     static set maxDelta(maxDelta: number) {
-        _instance.maxDelta = maxDelta;
+        Ticker.instance.maxDelta = maxDelta;
     }
 
     static get paused(): boolean {
-        return _instance.paused;
+        return Ticker.instance.paused;
     }
 
     static set paused(paused: boolean) {
-        _instance.paused = paused;
+        Ticker.instance.paused = paused;
     }
 
-    static get RAF_SYNCHED () { return TimingMode.RAF_SYNCHED; }
-    static get RAF () { return TimingMode.RAF; }
-    static get TIMEOUT () { return TimingMode.TIMEOUT; }
-
+    static RAF_SYNCHED: TimingMode = TimingMode.RAF_SYNCHED;
+    static RAF: TimingMode = TimingMode.RAF;
+    static TIMEOUT: TimingMode = TimingMode.TIMEOUT;
 }
-
-const _instance: Ticker = new Ticker();
