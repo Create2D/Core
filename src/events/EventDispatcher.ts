@@ -74,11 +74,10 @@ export default class EventDispatcher {
     }
     public off = this.removeEventListener;
 
-    public removeAllEventListeners(type: string) {
+    public removeAllEventListeners(type?: string) {
         if (!type) {
             this.listeners = this.captureListeners = null;
-        }
-        else {
+        } else {
             if (this.listeners) {
                 delete(this.listeners[type]);
             }
